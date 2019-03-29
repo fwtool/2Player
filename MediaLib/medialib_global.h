@@ -1,0 +1,12 @@
+#ifndef MEDIALIB_GLOBAL_H
+#define MEDIALIB_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(MEDIALIB_LIBRARY)
+#  define MEDIALIBSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define MEDIALIBSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // MEDIALIB_GLOBAL_H
