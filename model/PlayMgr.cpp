@@ -162,7 +162,6 @@ int CPlayMgr::move(const TD_PlayItemList& lstPlayItems, UINT uPos)
 
 bool CPlayMgr::remove(const TD_PlayItemList& lstPlayItems)
 {
-	UINT uIndex = 0;
 	UINT uLowCount = 0;
 	bool bFlag = false;
     m_Playlist.m_lstPlayItems(0, m_uPlayingItem, [&](CPlayItem& PlayItem, size_t pos) {
@@ -268,7 +267,7 @@ void CPlayMgr::_refresh()
 	}
 }
 
-bool CPlayMgr::play(int iItem)
+int CPlayMgr::play(int iItem)
 {
 	UINT uItem = 0;
 	if (-1 == iItem)
@@ -280,23 +279,21 @@ bool CPlayMgr::play(int iItem)
 		uItem = iItem;
 	}
 
+    int iDuration = -1;
+
 	m_Playlist.m_lstPlayItems.get(uItem, [&](CPlayItem& PlayItem) {
 		UINT uPrevPlayingItem = m_uPlayingItem;
 
 		m_uPlayingItem = uItem;
 		m_setPlayedIDs.insert(PlayItem.m_uID);
 
-		int iDuration = m_Player.Play(PlayItem.GetAbsPath());
-		if (iDuration < 0)
-		{
-			iDuration = 0;
-		}
-		PlayItem.SetDuration((UINT)iDuration);
+        iDuration = m_Player.Play(PlayItem.GetAbsPath());
+        PlayItem.SetDuration(iDuration);
 
 		m_ModelObserver.onPlay(m_uPlayingItem, uPrevPlayingItem);
 	});
 	
-	return false;
+    return iDuration;
 }
 
 void CPlayMgr::_playNext(int nFlag)

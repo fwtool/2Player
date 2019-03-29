@@ -33,6 +33,15 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    if (!g_model.getPlayMgr().getPlayingItems().empty())
+    {
+        g_model.getPlayMgr().play();
+    }
+    else
+    {
+        g_model.getPlayMgr().demandMediaSet(g_model.getMediaLib(), E_MediaSetType::MST_Album);
+    }
+
     MainWindow w;
     w.show();
 

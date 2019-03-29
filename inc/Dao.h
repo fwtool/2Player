@@ -245,8 +245,6 @@ public:
 
 	bool updateAlbumPos(UINT uAlbumID, int nOldPos, int nNewPos, UINT uSingerID);
 
-	int queryMaxAlbumItemPos(int nAlbumID);
-
     using CB_addAlbumItem = function<void(UINT uPlayItemID, const wstring& strPath, time_t time)>;
 	bool addAlbumItem(const list<wstring>& lstOppPaths, UINT uAlbumID, int nPos, const CB_addAlbumItem& cb);
 
@@ -318,9 +316,11 @@ public:
 	}
 
 private:
-	wstring getNextName(const wstring& strTableName, const wstring& strNameColumn, const wstring& strBaseName);
+    wstring _getNextName(const wstring& strTableName, const wstring& strNameColumn, const wstring& strBaseName);
 
 	bool _getMaxValue(const wstring& strTableName, const wstring& strNameColumn, int& iRet);
+
+    int _queryMaxAlbumItemPos(int nAlbumID);
 };
 
 using CDaoTransGuard = CDao::CTransGuard;

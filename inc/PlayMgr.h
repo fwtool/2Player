@@ -71,7 +71,7 @@ public:
 
 	int getRandomPlayItem();
 
-	bool play(int iItem=-1);
+    int play(int iItem=-1);
 	
 	void playNext();
 	void playLast();

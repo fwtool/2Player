@@ -370,8 +370,6 @@ BOOL CSingerMgr::SetBackAlbumItems(const TD_MediaList& lstAlbumItems)
 	BOOL bRet = false;
 	lstAlbumItems.getFront([&](CMedia& media) {
 		CAlbum *pAlbum = (CAlbum*)media.m_pParent;
-	
-		int nMaxPos = m_dao.queryMaxAlbumItemPos(pAlbum->m_uID);
 
 		list<UINT> lstAlbumItemID;
 		lstAlbumItems([&](CMedia& Media){

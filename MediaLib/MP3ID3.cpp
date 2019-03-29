@@ -689,8 +689,6 @@ static UINT AudioInfo_GetFrameHeader(FILE *lpMP3File,  MP3ID3V2INFO& MP3ID3V2Inf
 
 int AudioInfo_GetMP3ID3V2(FILE *lpMP3File, MP3ID3V2INFO& MP3ID3V2Info)
 {
-  DWORD dwFileRead = 0;
-
   //SetFilePointer((HANDLE)hMP3File, 0x00, 0, FILE_BEGIN);
   fseek(lpMP3File, 0, 0);
 

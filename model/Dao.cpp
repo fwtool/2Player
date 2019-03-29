@@ -242,7 +242,6 @@ bool CDao::querySinger(SArray<tagSingerGroup>& arrSingerGroup)
 	IDBResult *pRst = query(strSql);
 	__EnsureReturn(pRst, false);
 
-	int nID = 0;
 	wstring strName;
 	for (UINT uRow = 0; uRow < pRst->GetRowCount(); ++uRow)
 	{
@@ -517,7 +516,7 @@ bool CDao::updateAlbumPos(UINT uAlbumID, int nOldPos, int nNewPos, UINT uSingerI
 	return true;
 }
 
-int CDao::queryMaxAlbumItemPos(int nAlbumID)
+int CDao::_queryMaxAlbumItemPos(int nAlbumID)
 {
 	wstringstream ssSql;
 	ssSql << L"SELECT MAX(pos) FROM tbl_albumitem WHERE album_id = " << nAlbumID;
@@ -536,7 +535,7 @@ bool CDao::addAlbumItem(const list<wstring>& lstOppPaths, UINT uAlbumID, int nPo
 
 	auto addTime = time(0);
 
-	int nMaxPos = queryMaxAlbumItemPos(uAlbumID);
+    int nMaxPos = _queryMaxAlbumItemPos(uAlbumID);
 
 	int nAlbumItemID = 0;
 	_getMaxValue(L"tbl_albumitem", L"id", nAlbumItemID);
@@ -592,7 +591,7 @@ bool CDao::deleteAlbumItem(const list<UINT>& lstAlbumItemIDs)
 
 bool CDao::setbackAlbumItem(UINT uAlbumID, const list<UINT>& lstAlbumItemID)
 {
-	int nMaxPos = queryMaxAlbumItemPos(uAlbumID);
+    int nMaxPos = _queryMaxAlbumItemPos(uAlbumID);
 
 	CDBTransGuard transGuard(m_db);
 	wstringstream ssSql;
@@ -606,7 +605,7 @@ bool CDao::setbackAlbumItem(UINT uAlbumID, const list<UINT>& lstAlbumItemID)
 	return true;
 }
 
-wstring CDao::getNextName(const wstring& strTableName, const wstring& strNameColumn, const wstring& strBaseName)
+wstring CDao::_getNextName(const wstring& strTableName, const wstring& strNameColumn, const wstring& strBaseName)
 {
 	wstring strSql
 		= L"SELECT IFNULL(MAX(CAST(REPLACE(" + strNameColumn + L", \"" + strBaseName + L"\", '') AS INT)), 0) + 1 \
@@ -625,18 +624,18 @@ wstring CDao::getNextName(const wstring& strTableName, const wstring& strNameCol
 
 wstring CDao::getNewPlaylistName(const wstring& strBaseName)
 {
-	return getNextName(L"tbl_playlist", L"name", strBaseName);
+    return _getNextName(L"tbl_playlist", L"name", strBaseName);
 }
 
 wstring CDao::getNewSingerGroupName(const wstring& strBaseName)
 {
-	return getNextName(L"tbl_singergroup", L"name", strBaseName);
+    return _getNextName(L"tbl_singergroup", L"name", strBaseName);
 }
 
 wstring CDao::getNewAlbumName(UINT uSingerID, const wstring& strBaseName)
 {
 	wstring strTable = L"(SELECT * FROM tbl_album WHERE singer_id = " + to_wstring(uSingerID) + L")";
-	return getNextName(strTable, L"name", strBaseName);
+    return _getNextName(strTable, L"name", strBaseName);
 }
 
 bool CDao::_getMaxValue(const wstring& strTableName, const wstring& strNameColumn, int& iRet)
